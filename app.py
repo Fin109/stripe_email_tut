@@ -1,9 +1,9 @@
 from flask import Flask, render_template, url_for, request, jsonify
-import requests, stripe, config
+import requests, stripe
 
 app = Flask(__name__)
-app.config['STRIPE_PK'] = config.STRIPE_PK
-app.config['STRIPE_SK'] = config.STRIPE_SK
+app.config['STRIPE_PK'] = env1
+app.config['STRIPE_SK'] = env2
 stripe.api_key = app.config['STRIPE_SK']
 
 
@@ -35,7 +35,7 @@ def index():
 		# api_key is the public api_key found under profile, top right of mailchimp dashboard in "api_keys"
 		response = subscribe(user_email,
 			'my_list@sandboxc67e2c0ba1e64bdbb055e64d41135bb4.mailgun.org',
-			config.MAILGUN_SK) #< USES PRIVATE APIKEY
+			env3) #< USES PRIVATE APIKEY
 
 	return render_template("index.html", 
 		checkout_id=session['id'],
