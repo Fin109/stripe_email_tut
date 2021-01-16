@@ -1,9 +1,12 @@
 from flask import Flask, render_template, url_for, request, jsonify
 import requests, stripe
+from dotenv import load_dotenv
+load_dotenv()
+import os
 
 app = Flask(__name__)
-app.config['STRIPE_PK'] = env1
-app.config['STRIPE_SK'] = env2
+app.config['STRIPE_PK'] = os.getenv("env1")
+app.config['STRIPE_SK'] = os.getenv("env2")
 stripe.api_key = app.config['STRIPE_SK']
 
 
@@ -35,7 +38,7 @@ def index():
 		# api_key is the public api_key found under profile, top right of mailchimp dashboard in "api_keys"
 		response = subscribe(user_email,
 			'my_list@sandboxc67e2c0ba1e64bdbb055e64d41135bb4.mailgun.org',
-			env3) #< USES PRIVATE APIKEY
+			os.getenv("env3")) #< USES PRIVATE APIKEY
 
 	return render_template("index.html", 
 		checkout_id=session['id'],
