@@ -1,12 +1,10 @@
 from flask import Flask, render_template, url_for, request, jsonify
-import requests, stripe
-from dotenv import load_dotenv
-load_dotenv()
-import os
+import requests, stripe, os
+
 
 app = Flask(__name__)
-app.config['STRIPE_PK'] = os.getenv("env1")
-app.config['STRIPE_SK'] = os.getenv("env2")
+app.config['STRIPE_PK'] = os.getenv("STRIPE_PK")
+app.config['STRIPE_SK'] = os.getenv("STRIPE_SK")
 stripe.api_key = app.config['STRIPE_SK']
 
 
@@ -17,7 +15,7 @@ def subscribe(user_email, email_list, api_key):
         data={'subscribed': True,
               'address': user_email,})
 
-@app.route("/",methods=["GET","POST"]) # index
+@app.route("/",methods=["GET","POST"]) 
 def index():
 	img_url = url_for('static', filename='images/iphone-mockup.png')
 
@@ -32,13 +30,13 @@ def index():
 		)
 
 	if request.method == "POST":
-		user_email = request.form.get('email') # gets from that line in index.html
-		# user group_email is your alias found in mailing lists
+		user_email = request.form.get('email') 
+		# user_email is your alias found in mailing lists
 
-		# api_key is the public api_key found under profile, top right of mailchimp dashboard in "api_keys"
+
 		response = subscribe(user_email,
 			'my_list@sandboxc67e2c0ba1e64bdbb055e64d41135bb4.mailgun.org',
-			os.getenv("env3")) #< USES PRIVATE APIKEY
+			os.getenv("MAILGUN_SK")) # < Private mailgun apikey
 
 	return render_template("index.html", 
 		checkout_id=session['id'],
@@ -46,4 +44,4 @@ def index():
 		img_url = img_url)
 
 if __name__== '__main__':
-	app.run(debug=True)   # Flask application
+	app.run(debug=True)   
